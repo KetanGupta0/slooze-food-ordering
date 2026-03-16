@@ -8,8 +8,9 @@ from app.schemas.order_schema import OrderCreate
 from app.models.user import User
 from app.services.rbac import is_member
 from fastapi import HTTPException
+from app.models.restaurant import Restaurant
 
-router = APIRouter()
+router = APIRouter(tags=["Orders"])
 
 
 @router.post("/orders")
@@ -92,3 +93,26 @@ def cancel_order(order_id: int, user_id: int, db: Session = Depends(get_db)):
     db.commit()
 
     return {"message": "Order cancelled successfully"}
+
+@router.get("/orders")
+def list_orders(user_id: int, limit: int = 10, offset: int = 0, db: Session = Depends(get_db)):
+
+    user = db.query(User).filter(User.id == user_id).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    # Admin → all orders
+    if user.role_id == 1:
+        orders = db.query(Order).offset(offset).limit(limit).all()
+
+    # Manager → orders from their country
+    elif user.role_id == 2:
+
+        orders = (db.query(Order).join(Restaurant, Order.restaurant_id == Restaurant.id).filter(Restaurant.country_id == user.country_id).offset(offset).limit(limit).all())
+
+    # Member → only their own orders
+    else:
+        orders = db.query(Order).filter(Order.user_id == user.id).offset(offset).limit(limit).all()
+
+    return orders

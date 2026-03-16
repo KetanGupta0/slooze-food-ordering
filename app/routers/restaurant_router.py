@@ -8,10 +8,15 @@ from typing import List
 from app.schemas.restaurant_schema import RestaurantResponse
 from app.schemas.menu_schema import MenuItemResponse
 
-router = APIRouter()
+router = APIRouter(tags=["Restaurants"])
 
 @router.get("/restaurants", response_model=List[RestaurantResponse])
-def get_restaurants(user_id: int, db: Session = Depends(get_db)):
+def get_restaurants(
+    user_id: int,
+    limit: int = 10,
+    offset: int = 0,
+    db: Session = Depends(get_db)
+):
 
     user = db.query(User).filter(User.id == user_id).first()
 
@@ -20,12 +25,12 @@ def get_restaurants(user_id: int, db: Session = Depends(get_db)):
 
     # Admin can see everything
     if user.role_id == 1:
-        restaurants = db.query(Restaurant).all()
+        restaurants = db.query(Restaurant).offset(offset).limit(limit).all()
 
     else:
         restaurants = db.query(Restaurant).filter(
             Restaurant.country_id == user.country_id
-        ).all()
+        ).offset(offset).limit(limit).all()
 
     return restaurants
 

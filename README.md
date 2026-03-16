@@ -67,7 +67,7 @@ slooze-food-ordering
 
 1. Clone the repository
 
-git clone [<repository_url>](https://github.com/KetanGupta0/slooze-food-ordering.git)
+git clone https://github.com/KetanGupta0/slooze-food-ordering.git
 
 2. Navigate to project
 
@@ -91,11 +91,13 @@ CREATE DATABASE slooze_db;
 
 7. Configure .env file
 
+```
 DB_HOST=localhost
 DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=yourpassword
 DB_NAME=slooze_db
+```
 
 8. Start server
 

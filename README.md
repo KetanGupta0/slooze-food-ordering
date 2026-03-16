@@ -46,21 +46,28 @@ Example:
 
 ## Project Structure
 
-app/
- ├── routers
- ├── models
- ├── schemas
- ├── services
- ├── seed
- ├── config
- ├── database.py
- └── main.py
+```
+slooze-food-ordering
+│
+├── app
+│   ├── routers
+│   ├── models
+│   ├── schemas
+│   ├── services
+│   ├── seed
+│   ├── config
+│   ├── database.py
+│   └── main.py
+│
+├── requirements.txt
+└── README.md
+```
 
  ## Setup Instructions
 
 1. Clone the repository
 
-git clone <repository_url>
+git clone [<repository_url>](https://github.com/KetanGupta0/slooze-food-ordering.git)
 
 2. Navigate to project
 
